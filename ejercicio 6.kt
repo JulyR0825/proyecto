@@ -1,21 +1,34 @@
-//Realizar un algoritmo para determinar
-// el sueldo de un empleado, teniendo en cuenta que si trabajo menos de 5
-// años la antigüedad será del 30% y si
-// trabajo igual o más de 5 años del 50%.
-// (Sueldoacobrar= (sueldo+sueldo)*%)
+// Sumas parciales de Fibonacci: Implementa un algoritmo para calcular la
+//suma de los primeros N términos de la serie de Fibonacci
 
-fun main (){
-    val years_trabajados= readln().toInt()
-    val salary= readln().toInt()
-    var porcentaje =0
+fun main() {
+    // Solicita al usuario la cantidad de términos
+    println("Ingrese la cantidad de términos de la serie de Fibonacci para sumar:")
+    val n = readLine()?.toIntOrNull() ?: 0
 
-    if (years_trabajados<5){
-        porcentaje= 30
+    if (n <= 0) {
+        println("Por favor, ingrese un número mayor a 0.")
+    } else {
+        val suma = sumaFibonacci(n)
+        println("La suma de los primeros $n términos de la serie de Fibonacci es: $suma")
     }
-    else if ( years_trabajados>=5){
-        porcentaje= 50
-    }
-    val salario_cobrar=salary + (salary*porcentaje)
-    println(salario_cobrar)
+}
 
+// Función para calcular la suma de los primeros n términos de la serie de Fibonacci
+fun sumaFibonacci(n: Int): Int {
+    var a = 0
+    var b = 1
+    var suma = a + b
+
+    if (n == 1) return a
+    if (n == 2) return suma
+
+    for (i in 3..n) {
+        val siguiente = a + b
+        suma += siguiente
+        a = b
+        b = siguiente
+    }
+
+    return suma
 }

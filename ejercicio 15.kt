@@ -1,31 +1,66 @@
-//Ingresar 100 valores por teclado y determinar cuántas veces el valor ingresado es:
-// a) Mayor a 0 y menor a 10
-// b) Esta comprendido entre 10 y 100 ambos inclusive.
-// c) Es mayor a 100 d) Es i gativo e) Es igual a Olmprimir los resultados.
+// Determinante de una matriz: Crea una función que calcule el
+//determinante de matrices de hasta 4x4
+
 fun main() {
-    var contadorMayorCeroMenorDiez = 0
-    var contadorEntreDiezYCien = 0
-    var contadorMayorCien = 0
-    var contadorNegativo = 0
-    var contadorCero = 0
 
-    for (i in 1..100) {
-        print("Ingrese el valor $i: ")
-        val valor = readLine()?.toIntOrNull() ?: 0
+    // Ejemplo de una matriz 4x4
+    val matriz = arrayOf(
+        doubleArrayOf(1.0, 2.0, 3.0, 4.0),
+        doubleArrayOf(5.0, 6.0, 7.0, 8.0),
+        doubleArrayOf(9.0, 10.0, 11.0, 12.0),
+        doubleArrayOf(13.0, 14.0, 15.0, 16.0)
+    )
 
-        when {
-            valor > 0 && valor < 10 -> contadorMayorCeroMenorDiez++
-            valor in 10..100 -> contadorEntreDiezYCien++
-            valor > 100 -> contadorMayorCien++
-            valor < 0 -> contadorNegativo++
-            valor == 0 -> contadorCero++
-        }
+    // Calcular el determinante de la matriz
+    val determinante = calcularDeterminante(matriz)
+
+    println("El determinante de la matriz es: $determinante")
+}
+
+// Función para calcular el determinante de una matriz de hasta 4x4
+fun calcularDeterminante(matriz: Array<DoubleArray>): Double {
+    val n = matriz.size
+
+    // Si la matriz es 2x2, calcular directamente el determinante
+    if (n == 2) {
+        return matriz[0][0] * matriz[1][1] - matriz[0][1] * matriz[1][0]
     }
 
-    println("\nResultados:")
-    println("Valores entre 1 y 9: $contadorMayorCeroMenorDiez")
-    println("Valores entre 10 y 100: $contadorEntreDiezYCien")
-    println("Valores mayores a 100: $contadorMayorCien")
-    println("Valores negativos: $contadorNegativo")
-    println("Valores iguales a cero: $contadorCero")
+    // Si la matriz es 3x3 o 4x4, usar la expansión por cofactores
+    var determinante = 0.0
+    for (columna in 0 until n) {
+        determinante += matriz[0][columna] * cofactor(matriz, 0, columna)
+    }
+
+    return determinante
+}
+
+// Función auxiliar para calcular el cofactor de una matriz
+fun cofactor(matriz: Array<DoubleArray>, fila: Int, columna: Int): Double {
+    // Crear una submatriz eliminando la fila y la columna especificadas
+    val submatriz = Array(matriz.size - 1) { DoubleArray(matriz.size - 1) }
+    var submatrizFila = 0
+    for (i in matriz.indices) {
+        if (i == fila) continue
+        var submatrizColumna = 0
+        for (j in matriz[i].indices) {
+            if (j == columna) continue
+            submatriz[submatrizFila][submatrizColumna] = matriz[i][j]
+            submatrizColumna++
+        }
+        submatrizFila++
+    }
+
+    // Calcular el determinante de la submatriz
+    return (-1.0).pow(fila + columna) * calcularDeterminante(submatriz)
+}
+
+// Función para calcular el determinante de una matriz de tamaño 2x2
+fun calcularDeterminante(matriz: Array<DoubleArray>): Double {
+    return matriz[0][0] * matriz[1][1] - matriz[0][1] * matriz[1][0]
+}
+
+// Función para calcular la potencia de un número
+fun Double.pow(exponente: Int): Double {
+    return Math.pow(this, exponente.toDouble())
 }
